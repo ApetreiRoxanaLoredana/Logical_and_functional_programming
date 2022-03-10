@@ -1,0 +1,31 @@
+%adaugareSfarsit(L:list, E:integer, R:list)
+adaugareSfarsit([], E, [E]) :- !.
+adaugareSfarsit([H|T], E, [H|Tr]) :-
+	adaugareSfarsit(T, E, Tr).
+
+%inversa(L:list, Rez:list)
+inversa([], []) :- !.
+inversa([H|T], Rez) :-
+	inversa(T, L),
+	adaugareSfarsit(L, H, Rez).
+
+%produs(L:list, E: integer, Transport:integer, R:list)
+produs([Nr], E, Transport, [Rez]) :-
+	Rez is ((Nr * E + Transport) mod 10),
+	TransportNou is (Nr * E + Transport) div 10,
+	TransportNou =:= 0, !.
+produs([Nr], E, Transport, [Rez, T]) :-
+	Rez is ((Nr * E + Transport) mod 10),
+	TransportNou is (Nr * E + Transport) div 10,
+	TransportNou =\= 0,
+	T is TransportNou, !.
+produs([H|T], E, Transport, [Hr|Tr]) :-
+	Hr is (H * E + Transport) mod 10,
+	TransportNou is (H * E + Transport) div 10,
+	produs(T, E, TransportNou, Tr).
+
+%produsFinal(L:list, E:integer, Rez:list)
+produsFinal(L, E, Rez) :-
+	inversa(L, L1),
+	produs(L1, E, 0, L2),
+	inversa(L2, Rez).

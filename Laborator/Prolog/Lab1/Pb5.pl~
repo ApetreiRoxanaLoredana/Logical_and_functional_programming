@@ -1,0 +1,57 @@
+/*
+Problema 5, subpunctul a)
+Sa se scrie un predicat care sterge toate aparitiile unui anumit atom dintr-o lista
+*/
+
+% stergeAtom(A: atom, L: lista, R: lista)
+% A - atomul care trebuie sters
+% L - lista de atomi din care stergem atomul A
+% R - lista rezultata dupa stergerea atomului A din lista L
+% model de flux (i, i, o) sau (i, i, i)
+stergeAtom(_, [], []) :- !.
+stergeAtom(A, [A|L], L1) :-
+	stergeAtom(A, L, L1), !.
+stergeAtom(A, [H|L], [H|L1]) :-
+	stergeAtom(A, L, L1).
+
+/*
+Problema 5, subpunctul b)
+Definiti un predicat care, dintr-o lista de atomi, produce o lista de perechi
+(atom n), unde atom apare in lista initiala de nori.
+De ex: numar([1, 2, 1, 2, 1, 3, 1], X) va produce X = [[1, 4], [2, 2], [3, 1]].
+*/
+
+% Predicatul calculeaza numarul de aparitii a unui atom
+% nrAparitii(A: atom, L: lista, NR:integer)
+% A - atomul pentru care cautam numarul de aparintii
+% L - lista in care cautam aparitiile atomului A
+% NR - numarul de aparitii a atomului A in lista L
+% model de flux (i, i, o) sau (i, i, i)
+nrAparitii(_, [], 0) :- !.
+nrAparitii(A, [A|L], NR) :-
+	nrAparitii(A, L, N),
+	NR is N+1, !.
+nrAparitii(A, [_|L], NR) :-
+	nrAparitii(A, L, NR).
+
+% Predicatul produce o lista de perechi (atom, n), unde atom apare in
+% lista initiala de n ori.
+% perechi(L1: lista, L2: lista)
+% L1 - lista initiala
+% L2 - lista de perechi (atom, n), unde atom apare in lista initiala de
+% n ori
+% model de flux (i, o) sau (i, i)
+perechi([],[]) :- !.
+perechi([A], [[A, 1]]).
+perechi([A|L1], [[A,N]|L2]) :-
+	nrAparitii(A, [A|L1], N),
+	stergeAtom(A, [A|L1], R),
+	perechi(R, L2).
+
+
+
+
+
+
+
+

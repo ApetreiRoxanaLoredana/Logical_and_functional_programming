@@ -1,0 +1,14 @@
+%inclocuire(L:heterogeneous list,Contor:integer,Rez:heterogeneous list)
+inlocuire([], _, []) :- !.
+inlocuire([H|T], Contor, [Hr|Tr]) :-
+	is_list(H),
+	produsFinal(H, Contor, Hr),
+	ContorNou is Contor + 1,
+	inlocuire(T, ContorNou, Tr), !.
+inlocuire([H|T], Contor, [H|Tr]) :-
+	not(is_list(H)),
+	inlocuire(T, Contor, Tr).
+
+%inlocuireFinala(L:heterogeneous list, Rez:heterogeneous list)
+inlocuireFinala(L, Rez) :-
+	inlocuire(L, 1, Rez).
